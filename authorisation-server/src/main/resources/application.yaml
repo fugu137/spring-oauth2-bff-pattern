@@ -1,0 +1,57 @@
+logging:
+  level:
+    web: TRACE
+    org.springframework.security: TRACE
+
+server:
+  port: 8000
+
+spring:
+  # Templates reloading during development
+  thymeleaf:
+    prefix: file:src/main/resources/templates/
+    cache: false
+  # Static resources reloading during development
+  resources:
+    static-locations: file:src/main/resources/static/
+    cache-period: 0
+
+  security:
+    oauth2:
+      client:
+        provider:
+          github:
+            user-name-attribute: login
+        registration:
+          github:
+            provider: github
+            client-id: ${OAUTH2_GITHUB_ID}
+            client-secret: ${OAUTH2_GITHUB_SECRET}
+            scope:
+              - read:user
+
+      authorizationserver:
+        issuer: http://auth-server:8000
+        client:
+          gateway:
+            require_authorization_consent: true
+            registration:
+              client-id: gateway
+              client-name: Spring OAuth2 Gateway
+              client-secret: "{noop}secret"
+              client-authentication-methods:
+                - client_secret_basic
+              authorization-grant-types:
+                - authorization_code
+                - refresh_token
+              redirect-uris:
+                - http://gateway:7000/login/oauth2/code/gateway
+                - http://gateway:7000/authorized
+              scopes:
+                - openid
+                - articles.read
+                - profile.read
+              post_logout_redirect_uris:
+                - http://gateway:7000
+                - http://gateway:7000?logout
+                - http://gateway:7000/login?logout

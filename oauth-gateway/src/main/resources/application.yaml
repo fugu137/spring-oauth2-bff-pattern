@@ -1,0 +1,54 @@
+logging:
+  level:
+    web: TRACE
+    org.springframework.security: DEBUG
+
+server:
+  port: 7000
+
+spring:
+  cloud:
+    gateway:
+      default-filters:
+        - DedupeResponseHeader=Access-Control-Allow-Origin Access-Control-Allow-Credentials, RETAIN_UNIQUE
+      routes:
+        - id: articles-api
+          uri: http://resource-server:9000
+          predicates:
+            - Path=/api/articles/**
+          filters:
+            - TokenRelay=
+            - SaveSession
+            - StripPrefix=1
+        - id: profiles-api
+          uri: http://resource-server2:9001
+          predicates:
+            - Path=/api/profile/**
+          filters:
+            - TokenRelay=
+            - SaveSession
+            - StripPrefix=1
+        - id: ui
+          uri: http://localhost:3000
+          predicates:
+            - Path=/**
+
+  security:
+    oauth2:
+      client:
+        provider:
+          auth-server:
+            issuer-uri: http://auth-server:8000
+
+        registration:
+          gateway:
+            provider: auth-server
+            client-id: gateway
+            client-name: Spring OAuth2 Gateway
+            client-secret: secret
+            authorization-grant-type: authorization_code
+            redirect-uri: "http://gateway:7000/login/oauth2/code/{registrationId}"
+            scope:
+              - openid
+              - articles.read
+              - profile.read

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title th:text="${title}">Log out</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-white flex justify-center mt-64">
+
+<main class="">
+    <form th:action="@{/oidc/logout}" method="post" class="mx-20 my-10 max-w-lg bg-white">
+        <h2 class="text-lg">Are you sure you want to log out?</h2>
+        <button type="submit"
+                class="py-2 border border-slate-800 rounded w-full mt-10 mb-1 hover:bg-slate-100 active:bg-slate-200 cursor-pointer">
+            Log out
+        </button>
+    </form>
+</main>
+</body>
+
+</html>

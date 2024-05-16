@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head (title='Sign In')}"></head>
+
+<body class="bg-slate-100 grid h-screen place-items-center">
+
+<main class="bg-white py-8 w-[540px] rounded-xl shadow-lg">
+    <h1 class="font-semibold mt-8 text-4xl text-center w-full-lg">Sign In</h1>
+
+    <form th:action="@{/login}" method="post" class="mx-16 my-10 max-w-lg bg-white">
+        <div th:if="${param.error == null && param.logout == null}"
+             class="bg-slate-100 h-20 flex items-center justify-center rounded-md">
+            Enter your username and password to sign in
+        </div>
+        <div th:if="${param.error}" class="bg-red-100 h-20 flex items-center justify-center rounded-md">
+            Invalid username or password
+        </div>
+        <div th:if="${param.logout}" class="bg-orange-100 h-20 flex items-center justify-center rounded-md">
+            You have been logged out
+        </div>
+
+        <div class="mb-8 mt-8">
+            <label for="username" title="Password" class="block mb-2">Username</label>
+            <input id="username" type="text" name="username" placeholder="Username" autofocus
+                   class="bg-white border border-slate-400 p-2 text-slate-900 w-full rounded">
+        </div>
+
+        <div class="mb-6">
+            <label for="password" title="Password" class="block mb-2">Password</label>
+            <input id="password" type="password" name="password" placeholder="Password"
+                   class="bg-white border border-slate-400 p-2 text-slate-900 w-full rounded">
+        </div>
+
+        <input type="submit" value="Log in"
+               class="py-2 border border-slate-800 rounded w-full mt-10 mb-1 hover:bg-slate-100 active:bg-slate-200 cursor-pointer">
+
+        <div class="my-6 text-center underline underline-offset-2 text-slate-800">
+            <a href="/oauth2/authorization/github">Login with GitHub</a>
+        </div>
+    </form>
+</main>
+</body>
+</html>
